@@ -29,7 +29,8 @@
 -> cat file1_name>>file2_name (double arrows ">>" are used for appending and single arrow">" is used for overwriting)
 
 7. How to redirect STDERR to STDOUT? 
-->
+-> my_name =a 2>command_error.txt
+   cat command_error.txt(will give output as "command not found" as this is the error that will be given by the system as my_name=a is not a valid command)
 
 8. How to find memory usage on a unix system 
 -> free
@@ -50,7 +51,11 @@
    netstat (gives all the ports)
 
 12. How do seperate a process from the current running shell so that it continues to run even after the user logs out. 
-->
+-> bash waitforever.sh
+   ^Z (to stop the process)
+   bg
+   ^C
+   fg
 
 13. How do you know how much disk is available? 
 -> df
