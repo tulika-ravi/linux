@@ -1,0 +1,186 @@
+
+1. How to check a process running with full path information?
+-> ps -ef
+
+2. Using vi editor, how to globally replace a string?
+-> vi filename.txt
+      (press i for insertion process)
+      :%s/old_string/new_string
+            :wq(if u wanna save this) 
+                   OR
+            :q!(if you dont wanna save it and wanna force exit)
+
+3. How to search for a string in all files under a folder and sub-folders?
+-> grep "string" filename.txt
+
+4. How to remove control-m characters? Refer file /home/srinivasan.r/unix/ctrlm.txt on agni server which contains these characters. 
+-> cd (paste the path)
+   ls
+   vi filename(e.g.,ctrlm.txt)
+      :%s/^M//g
+         :q!(since its just a read file)
+
+5. How to redirect the output of a command to a file output.txt and errors to another file errors.txt ?
+-> touch output.txt (create two files of names output.txt and errors.txt)
+   touch errors.txt (create two files of names output.txt and errors.txt)
+   command-name > output.txt 2> errors.txt
+
+6. How to redirect the output of a command and append to the file? 
+-> cat file1_name>>file2_name (double arrows ">>" are used for appending and single arrow">" is used for overwriting)
+
+7. How to redirect STDERR to STDOUT? 
+-> my_name =a 2>command_error.txt
+   cat command_error.txt(will give output as "command not found" as this is the error that will be given by the system as my_name=a is not a valid command)
+
+8. How to find memory usage on a unix system 
+-> free
+     {free -m(if u want it to be displayed in megabyte)
+      free -b(if u want it to be displayed in bytes)
+      free -g(if u want it to be displayed in gigabyte)
+      free -h(if u want it to be displayed in human readable form)}
+
+9. How to find how you are logged in as 
+-> whoami
+
+10. How to find the type of machine you are currently on and name of the machine 
+-> hostnamectl(gives total information about the host)
+   hostname(just gives the hostname)
+
+11. How to find out if a particular port is being used 
+-> netstat -anpe | grep LISTEN (this will give just litening ports)
+   netstat (gives all the ports)
+
+12. How do seperate a process from the current running shell so that it continues to run even after the user logs out. 
+-> bash waitforever.sh
+   ^Z (to stop the process)
+   bg
+   ^C
+   fg
+
+13. How do you know how much disk is available? 
+-> df
+   df -H(for human understandable language)
+
+14. What is the difference between kill -9 and just kill 
+-> "kill" command sends a signal to terminate any process gracefully. Hence this is safe.
+   "kill -9” command sends a signal to terminate any process forcefully. Hence this is unsafe.
+
+15. What permissions chmod 710 on a directory do? 
+-> it sets persmission so that user can read,write or execute.
+   7->user      ->read-write-execute->rwx
+   1->group     ->execute           ->--x
+   0->other user->no permission     ->---
+
+16. How to run a process in the background ? How to bring it to the foreground ? 
+-> sleep 100 &
+      fg %(process id)
+      bg %(process id) it will start running in background
+   ctrl+Z -> will terminate the running process
+
+17. How to find how many times the word “hello” occurs in a file. 
+-> grep "hello" -o demo.txt | wc -l
+
+18. How to check whether a machine is reachable from your machine.
+-> ping machine_name OR ping ip_adress
+
+
+
+
+Commands to practice (a single command as long as possible) :
+
+1* List number of files in a directory    ...
+->[Ans.:ls -l   ]
+   and count lines in each file    
+->[Ans.:wc -l filename.java (_or_) wc filename.java]
+
+2* Find the files which are 5 days older  ...
+->[Ans.:  ]
+   and then zip them      
+->[Ans.:zip -r newName.zip directoryName  ]
+
+3* read a file and replace 10th appearance of the word "the" to "abc" and write the output in another file   
+->[Ans.:  ]
+
+4* list of 5 largest files from any directory       
+->[Ans.:ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head   ]
+
+5* find out the available memory on the server, how long the server has been up and top 5 processes taking max memory of the 
+   server 
+->[Ans.:grep MemTotal /proc/meminfo  ]   
+
+6* find out the pid of the process        ...
+->[Ans.:ps aux  ]
+   and kill the process gracefully/forcefully       
+->[Ans.:kill -15 27707   ...here 27707 is PID  ]
+
+7* find out how many users are connected to port 22 on a server      
+->[Ans.:netstat -anp | grep 22 | wc -l     ]
+
+8* copy a file from one server to another (using scp)      
+->[Ans.: server to local m/c: scp tulika.ravi@10.76.139.50:/home/tulika.ravi/test/newdemo.txt .  (and)
+    local m/c to server : scp /c/Users/tulika.ravi/desktop/newdemo.txt tulika.ravi@10.76.139.50:/home/tulika.ravi/test      ] ]
+
+
+
+
+
+Script to write ->
+1. write a bash script to print the the present working directory along with its list of files inside
+   The current working Directory ->
+   The list of files and Subdirectories ->
+->vi 1ndQue.sh
+		#! /usr/bin/bash
+		echo The current working directory:;
+		pwd;
+		echo The list of files present in current directory:;
+		ls;
+		echo Files present in the subdirectory present in current directory:;
+		ls -d;
+		echo the files present in subduirectory are :;
+		ls */;
+	./1ndQue.sh
+	ls -l
+	chmod +x 1ndQue.sh
+	./1ndQue.sh
+
+2. write a bash script to print with tab delimited first 50 Fibonacci numbers in reverse directions
+->vi fib.sh
+     #! /bin/bash
+first=0
+second=1
+count=0
+count2=0
+num=50
+rev=0
+while [ $count -le $num ]
+do
+  fib=$(( $first + $second ))
+ if [ $num -eq $count ]
+  then
+    while [ $num -ge $count2 ]
+      do
+        rev=$(( $second - $first ))
+        echo $rev
+        second=$first
+        first=$rev
+        let count2++
+      done
+  fi
+first=$second
+second=$fib
+let count++
+done
+:wq
+./fib.sh
+chmod +x fib.sh
+./fib.sh
+
+
+3. write a bash script which takes a line as input and then print the same line in capital letters
+-> vi 3rdQue.sh
+		name='hello vinayak, how are you?'
+		echo ${name^^}
+	./3rdQue.sh
+	chmod +x 3rdQue.sh
+	./3rdQue.sh
+
